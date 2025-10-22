@@ -1,3 +1,12 @@
+from flask import Flask, request, render_template_string
+import requests
+import os
+
+app = Flask(__name__)
+
+GRAPH_API_URL = "https://graph.facebook.com/v18.0"
+
+HTML_TEMPLATE = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -408,3 +417,31 @@
   </script>
 </body>
 </html>
+'''
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        access_token = request.form.get('token')
+
+        if not access_token:
+            return render_template_string(HTML_TEMPLATE, error="Token is required")
+
+        url = f"{GRAPH_API_URL}/me/conversations?fields=id,name&access_token={access_token}"
+
+        try:
+            response = requests.get(url)
+            data = response.json()
+
+            if "data" in data:
+                return render_template_string(HTML_TEMPLATE, groups=data["data"])
+            else:
+                return render_template_string(HTML_TEMPLATE, error="Invalid token or no Messenger groups found")
+        except Exception as e:
+            return render_template_string(HTML_TEMPLATE, error="Something went wrong")
+
+    return render_template_string(HTML_TEMPLATE)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

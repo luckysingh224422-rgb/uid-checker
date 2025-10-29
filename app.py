@@ -351,7 +351,7 @@ HTML_TEMPLATE = '''
   
   <div class="container">
     <div class="title">
-      <span class="crown-icon">👑</span>AAHAN TOKEN CHECKER<span class="crown-icon">👑</span>
+      <span class="crown-icon">👑</span>AAHAN UID CHECKER<span class="crown-icon">👑</span>
     </div>
     
     <div class="subtitle">ULTIMATE FACEBOOK UID FINDER | VIP ACCESS</div>
